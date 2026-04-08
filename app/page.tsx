@@ -154,18 +154,28 @@ function PlanCard({
       </div>
 
       {/* CTA Button */}
-      <a href={link} target="_blank" rel="noopener noreferrer" className="block">
-        <Button
-          size="lg"
-          className={`w-full h-14 text-base font-bold rounded-xl transition-all duration-300 cursor-pointer ${
-            isHighlighted
-              ? "bg-gradient-to-r from-[#00ff88] to-[#00cc6a] hover:from-[#00cc6a] hover:to-[#00ff88] text-black shadow-lg shadow-[#00ff88]/30 hover:scale-[1.02]"
-              : "bg-[#1f1f1f] hover:bg-[#2a2a2a] text-white border border-[#333] hover:border-[#00ff88]"
-          }`}
-        >
-          {buttonText}
-        </Button>
-      </a>
+      <a 
+  href={link} 
+  target="_blank" 
+  rel="noopener noreferrer" 
+  className="block"
+  onClick={() => {
+    if (window.fbq) {
+      window.fbq('track', 'InitiateCheckout');
+    }
+  }}
+>
+  <Button
+    size="lg"
+    className={`w-full h-14 text-base font-bold rounded-xl transition-all duration-300 cursor-pointer ${
+      isHighlighted
+        ? "bg-gradient-to-r from-[#00ff88] to-[#00cc6a] hover:from-[#00cc6a] hover:to-[#00ff88] text-black shadow-lg shadow-[#00ff88]/30"
+        : "bg-[#1f1f1f] hover:bg-[#2a2a2a] text-white border border-[#333] hover:border-[#00ff88]"
+    }`}
+  >
+    {buttonText}
+  </Button>
+</a>
 
       {/* PixBank logo */}
       <div className="flex items-center justify-center mt-6">
@@ -247,7 +257,13 @@ function WhatsAppButton() {
   )
 }
 
-export default function HomePage() {
+export default function HomePage() 
+
+{useEffect(() => {
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq('track', 'PageView');
+    }
+  }, []);
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden">
       {/* Background effects */}
