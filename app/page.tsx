@@ -4,6 +4,14 @@ import { useState, useEffect } from "react"
 import { Check, Key, Wallet, Shield, Zap, RefreshCw, Sparkles, MessageCircle, Phone, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
+// Extensão da interface Window para o TypeScript não reclamar do Facebook Pixel
+declare global {
+  interface Window {
+    fbq: any;
+    _fbq: any;
+  }
+}
+
 interface Benefit {
   icon: React.ReactNode
   text: string
@@ -106,7 +114,6 @@ function PlanCard({
         }
       `}
     >
-      {/* Badge */}
       {badge && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2">
           <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#ff8800] to-[#ff4d4d] text-white text-sm font-bold shadow-lg">
@@ -116,12 +123,10 @@ function PlanCard({
         </div>
       )}
 
-      {/* Plan name */}
       <div className="text-center mb-6 pt-2">
         <h3 className="text-xl font-bold text-white">{name}</h3>
       </div>
 
-      {/* Pricing */}
       <div className="text-center mb-6">
         <div className="flex items-center justify-center gap-2 mb-2">
           <span className="text-gray-500 line-through text-lg">
@@ -139,7 +144,6 @@ function PlanCard({
         </div>
       </div>
 
-      {/* Benefits */}
       <div className="flex-1 space-y-4 mb-8">
         {benefits.map((benefit, index) => (
           <div key={index} className="flex items-start gap-3">
@@ -153,33 +157,31 @@ function PlanCard({
         ))}
       </div>
 
-      {/* CTA Button */}
       <a 
-  href={link} 
-  target="_blank" 
-  rel="noopener noreferrer" 
-  className="block"
-  onClick={() => {
-  if (window.fbq) {
-    window.fbq('track', 'InitiateCheckout', {
-      content_name: name
-    });
-  }
-}}
->
-  <Button
-    size="lg"
-    className={`w-full h-14 text-base font-bold rounded-xl transition-all duration-300 cursor-pointer ${
-      isHighlighted
-        ? "bg-gradient-to-r from-[#00ff88] to-[#00cc6a] hover:from-[#00cc6a] hover:to-[#00ff88] text-black shadow-lg shadow-[#00ff88]/30"
-        : "bg-[#1f1f1f] hover:bg-[#2a2a2a] text-white border border-[#333] hover:border-[#00ff88]"
-    }`}
-  >
-    {buttonText}
-  </Button>
-</a>
+        href={link} 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="block"
+        onClick={() => {
+          if (typeof window !== "undefined" && window.fbq) {
+            window.fbq('track', 'InitiateCheckout', {
+              content_name: name
+            });
+          }
+        }}
+      >
+        <Button
+          size="lg"
+          className={`w-full h-14 text-base font-bold rounded-xl transition-all duration-300 cursor-pointer ${
+            isHighlighted
+              ? "bg-gradient-to-r from-[#00ff88] to-[#00cc6a] hover:from-[#00cc6a] hover:to-[#00ff88] text-black shadow-lg shadow-[#00ff88]/30"
+              : "bg-[#1f1f1f] hover:bg-[#2a2a2a] text-white border border-[#333] hover:border-[#00ff88]"
+          }`}
+        >
+          {buttonText}
+        </Button>
+      </a>
 
-      {/* PixBank logo */}
       <div className="flex items-center justify-center mt-6">
         <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${
           isHighlighted ? "bg-[#00ff88]/10" : "bg-[#1a1a1a]"
@@ -198,14 +200,12 @@ function CountdownTimer() {
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null)
 
   useEffect(() => {
-    // Check localStorage for existing timer
     const storedEndTime = localStorage.getItem("bankpix_timer_end")
     let endTime: number
 
     if (storedEndTime) {
       endTime = parseInt(storedEndTime, 10)
     } else {
-      // Set new timer for 15 minutes from now
       endTime = Date.now() + 15 * 60 * 1000
       localStorage.setItem("bankpix_timer_end", endTime.toString())
     }
@@ -216,7 +216,6 @@ function CountdownTimer() {
       setTimeRemaining(remaining)
 
       if (remaining <= 0) {
-        // Reset timer when it reaches 0
         const newEndTime = Date.now() + 15 * 60 * 1000
         localStorage.setItem("bankpix_timer_end", newEndTime.toString())
       }
@@ -238,7 +237,7 @@ function CountdownTimer() {
 
   return (
     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1a1a1a] border border-[#333] text-gray-300">
-      <Clock className="w-4 h-4 text-[#ff4d4d]" />
+      <Check className="w-4 h-4 text-[#ff4d4d]" />
       <span className="text-sm">Tempo restante:</span>
       <span className="font-mono font-bold text-[#ff4d4d]">{formatTime(timeRemaining)}</span>
     </div>
@@ -259,32 +258,31 @@ function WhatsAppButton() {
   )
 }
 
-export default function HomePage() 
+// CORREÇÃO AQUI: Todo o conteúdo deve estar dentro da função HomePage
+export default function HomePage() {
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      !(function(f,b,e,v,n,t,s){
+        if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window as any, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js'));
 
-useEffect(() => {
-  if (typeof window !== "undefined") {
-    !(function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)})(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
+      window.fbq('init', '829061486173119');
+      window.fbq('track', 'PageView');
+    }
+  }, []);
 
-    window.fbq('init', '829061486173119');
-    window.fbq('track', 'PageView');
-  }
-}, []);
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden">
-      {/* Background effects */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#ff4d4d]/5 rounded-full blur-[150px]" />
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#00ff88]/5 rounded-full blur-[150px]" />
       </div>
 
-      {/* Header */}
       <header className="relative py-6 px-4">
         <div className="max-w-6xl mx-auto flex items-center justify-center">
           <div className="flex items-center gap-2">
@@ -296,7 +294,6 @@ useEffect(() => {
         </div>
       </header>
 
-      {/* Hero section */}
       <section className="relative px-4 py-8 md:py-12">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">
@@ -307,12 +304,10 @@ useEffect(() => {
             Comece a receber pagamentos hoje mesmo!
           </p>
           
-          {/* Countdown Timer */}
           <div className="mb-6">
             <CountdownTimer />
           </div>
 
-          {/* Benefits highlights */}
           <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 mb-8">
             <div className="flex items-center gap-2 text-gray-300">
               <Check className="w-5 h-5 text-[#00ff88]" />
@@ -330,10 +325,8 @@ useEffect(() => {
         </div>
       </section>
 
-      {/* Plans section */}
       <section className="relative px-4 py-8 md:py-12">
         <div className="relative z-10 max-w-6xl mx-auto">
-          {/* Plans grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 lg:gap-8 items-start">
             {plans.map((plan, index) => (
               <div
@@ -348,7 +341,6 @@ useEffect(() => {
             ))}
           </div>
 
-          {/* WhatsApp CTA - After plans */}
           <div className="mt-12 md:mt-16 text-center">
             <p className="text-gray-400 text-lg mb-4">
               Tem duvidas? Fale conosco pelo WhatsApp
@@ -358,7 +350,6 @@ useEffect(() => {
         </div>
       </section>
 
-      {/* Trust section */}
       <section className="relative px-4 py-12 md:py-16">
         <div className="max-w-4xl mx-auto">
           <div className="bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] rounded-2xl border border-[#333] p-8 md:p-12">
@@ -398,29 +389,6 @@ useEffect(() => {
         </div>
       </section>
 
-      {/* Final CTA with WhatsApp */}
-      <section className="relative px-4 py-12 md:py-16">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-            Ainda tem duvidas?
-          </h2>
-          <p className="text-gray-400 text-lg mb-8">
-            Nossa equipe esta pronta para ajudar voce. Entre em contato agora mesmo!
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <WhatsAppButton />
-            <a
-              href="tel:+258842118909"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#1f1f1f] hover:bg-[#2a2a2a] border border-[#333] hover:border-[#00ff88] text-gray-300 hover:text-white transition-all duration-300"
-            >
-              <Phone className="w-5 h-5" />
-              <span className="font-medium">Ligar agora</span>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
       <footer className="relative py-8 px-4 border-t border-[#1f1f1f]">
         <div className="max-w-6xl mx-auto text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
