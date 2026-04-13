@@ -45,20 +45,7 @@ function createBenefit(type: string, text: string): Benefit {
 }
 
 const plans: Plan[] = [
-  {
-    name: "Bank Pix Basico",
-    price: 299,
-    originalPrice: 599,
-    benefits: [
-      createBenefit("key", "Chave personalizada (x1)"),
-      createBenefit("wallet", "Limite de saque por dia: 200 MZN"),
-      createBenefit("shield", "Conta garantida"),
-      createBenefit("zap", "Levantamento instantaneo (M-pesa)"),
-    ],
-    buttonText: "Quero Bank Pix Basico",
-    link: "https://my.debito.co.mz/pay/f3f148d7-2749-4b0e-b23d-f8f208b582bc",
-    isHighlighted: false,
-  },
+ 
   {
     name: "Bank Pix Pro Max",
     price: 729,
@@ -71,24 +58,11 @@ const plans: Plan[] = [
       createBenefit("refresh", "Atualizacoes automaticas"),
     ],
     buttonText: "Quero Bank Pix Pro Max",
-    link: "https://my.debito.co.mz/pay/cfdc7006-0e32-40ee-88de-72ae5bdc3463",
+    link: "https://pay.kambafy.com/checkout/e8ab6f89-80dc-49c1-b937-c19c3a704ba8",
     isHighlighted: true,
     badge: "Melhor Oferta",
   },
-  {
-    name: "Bank Pix Normal",
-    price: 379,
-    originalPrice: 809,
-    benefits: [
-      createBenefit("key", "Chave personalizada (x3)"),
-      createBenefit("wallet", "Limite de saque por dia: 1000 MZN"),
-      createBenefit("shield", "Conta garantida"),
-      createBenefit("zap", "Levantamento instantaneo"),
-    ],
-    buttonText: "Quero Bank Pix Normal",
-    link: "https://my.debito.co.mz/pay/5cf54a87-c174-4000-a662-21127880185b",
-    isHighlighted: false,
-  },
+ 
 ]
 
 function PlanCard({
