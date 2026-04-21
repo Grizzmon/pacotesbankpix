@@ -221,7 +221,7 @@ function CountdownTimer() {
 function WhatsAppButton() {
   return (
     <a
-      href="https://wa.me/258842118909?text=Quero%20saber%20mais%20sobre%20o%20Bank%20Pix"
+    href="https://wa.me/258842118909?text=Tenho%20d%C3%BAvidas%20sobre%20como%20obter%20o%20aplicativo%20BankPix"
       target="_blank"
       rel="noopener noreferrer"
       className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-lg shadow-lg shadow-[#25D366]/30 transition-all duration-300 hover:scale-105"
@@ -245,9 +245,14 @@ export default function HomePage() {
         s.parentNode.insertBefore(t,s)}(window as any, document,'script',
         'https://connect.facebook.net/en_US/fbevents.js'));
 
-      window.fbq('init', '829061486173119');
-      window.fbq('track', 'PageView');
-    }
+fbq('init', '829061486173119');
+fbq('track', 'PageView');
+
+fbq('track', 'ViewContent', {
+  content_name: 'Sales Page'
+});
+
+      
   }, []);
 
   return (
